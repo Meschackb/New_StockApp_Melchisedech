@@ -3,165 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StockApp Melchisédech - Gestion des Produits</title>
-    <link rel="stylesheet" href="styles.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>StockApp - Gestion de Stock</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f7f6; color: #333; }
+        header { background-color: #2c3e50; color: white; padding: 20px 0; text-align: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        nav { background-color: #34495e; padding: 10px 0; text-align: center; }
+        nav button { 
+            background-color: #1abc9c; color: white; border: none; padding: 10px 20px; 
+            margin: 0 5px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+        }
+        nav button:hover { background-color: #16a085; }
+        h1, h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
+        .form-section, .table-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; align-items: end; }
+        label { font-weight: bold; margin-bottom: 5px; display: block; }
+        input[type="text"], input[type="number"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button[type="submit"] { background-color: #2ecc71; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; margin-top: 10px; }
+        button[type="submit"]:hover { background-color: #27ae60; }
+        .error-message { color: red; text-align: center; margin-top: 10px; font-weight: bold; }
+
+        /* Table Styling */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #3498db; color: white; }
+        tr:nth-child(even) { background-color: #f8f8f8; }
+        .low-stock { background-color: #f1c40f; color: #333; font-weight: bold; }
+        .actions button { 
+            background-color: #e74c3c; color: white; border: none; padding: 5px 10px; 
+            border-radius: 4px; cursor: pointer; margin-right: 5px; transition: background-color 0.3s; 
+        }
+        .actions button:hover { background-color: #c0392b; }
+        .actions .sell-btn, .actions .purchase-btn { background-color: #3498db; }
+        .actions .sell-btn:hover, .actions .purchase-btn:hover { background-color: #2980b9; }
+
+        /* Modal Styling */
+        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
+        .close-btn:hover, .close-btn:focus { color: #000; text-decoration: none; cursor: pointer; }
+
+        /* Report View */
+        .report-section { display: none; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .report-header button { background-color: #f39c12; }
+        .report-header button:hover { background-color: #e67e22; }
+
+        @media print {
+            body * { visibility: hidden; }
+            .report-section, .report-section * { visibility: visible; }
+            .report-section { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; margin: 0; }
+            .report-header button, nav, .form-section { display: none; }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>StockApp Melchisédech</h1>
+        <p>Système de Gestion d'Inventaire et de Rapports</p>
+    </header>
+
+    <nav>
+        <button onclick="showSection('dashboard')">INVENTAIRE</button>
+        <button onclick="showSection('sales-report')">RAPPORT DE VENTE</button>
+        <button onclick="showSection('purchase-report')">RAPPORT D'ACHAT</button>
+    </nav>
 
     <div class="container">
-        <header>
-            <h1>StockApp Melchisédech - Gestion de Stock</h1>
-            <div class="header-actions">
-                <button class="btn btn-secondary" id="show-about-btn">À Propos</button>
-                <button class="btn btn-info" id="show-report-btn">Rapport de Vente</button>
-                <button class="btn btn-danger" id="show-sell-btn">Enregistrer une Vente</button>
-                <button class="btn btn-primary" id="show-add-btn">+ Ajouter un Produit</button>
+        <!-- Tableau de bord (Inventaire) -->
+        <section id="dashboard" class="content-section">
+            <h2>Gestion des Produits</h2>
+            
+            <div class="form-section">
+                <h3>Ajouter/Modifier un Produit</h3>
+                <form id="productForm">
+                    <div>
+                        <label for="productName">Nom du Produit:</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    <div>
+                        <label for="productQuantity">Quantité en Stock:</label>
+                        <input type="number" id="productQuantity" required min="0">
+                    </div>
+                    <div>
+                        <label for="productPrice">Prix d'Achat Unitaire:</label>
+                        <input type="number" id="productPrice" required min="0.01" step="0.01">
+                    </div>
+                    <div>
+                        <label for="productMinStock">Stock Minimum d'Alerte:</label>
+                        <input type="number" id="productMinStock" required min="0">
+                    </div>
+                    <div>
+                        <button type="submit" id="submitBtn">AJOUTER LE PRODUIT</button>
+                        <input type="hidden" id="productId">
+                    </div>
+                </form>
+                <div id="product-message" class="error-message"></div>
             </div>
-        </header>
-        
-        <main>
-            <section id="product-list-view">
-                <h2>Inventaire Actuel</h2>
 
-                <div id="alert-container">
-                </div>
-
-                <table id="product-list-table">
+            <div class="table-section">
+                <h3>Inventaire Actuel</h3>
+                <table id="productTable">
                     <thead>
                         <tr>
-                            <th>Nom du Produit</th>
+                            <th>Nom</th>
                             <th>Quantité</th>
-                            <th>Prix d'Achat (€)</th>
-                            <th>Seuil Min</th>
+                            <th>Prix d'Achat</th>
+                            <th>Alerte Stock Min.</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="product-tbody">
-                        </tbody>
+                    <tbody>
+                        <!-- Les produits seront insérés ici -->
+                    </tbody>
                 </table>
+            </div>
+        </section>
 
-                <p id="empty-stock-message" class="alert alert-low-stock" style="display: none;">
-                    Aucun produit en stock. Ajoutez-en un pour commencer !
-                </p>
-            </section>
-
-            <section id="product-form-view" class="form-view" style="display: none;">
-                <h2 id="form-title">Ajouter un Nouveau Produit</h2>
-                <form id="product-form">
-                    <input type="hidden" id="product-id"> 
-                    
-                    <div class="form-group">
-                        <label for="name">Nom du Produit</label>
-                        <input type="text" id="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="quantity">Quantité en Stock</label>
-                        <input type="number" id="quantity" required min="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="price">Prix Unitaire d'Achat (€)</label>
-                        <input type="number" id="price" required min="0.01" step="0.01">
-                    </div>
-                    <div class="form-group">
-                        <label for="minStockLevel">Niveau de Stock Minimum (Alerte)</label>
-                        <input type="number" id="minStockLevel" required min="0">
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-form-btn">Annuler</button>
-                        <button type="submit" class="btn btn-primary">Enregistrer le Produit</button>
-                    </div>
-                </form>
-            </section>
-
-            <section id="sale-form-view" class="form-view" style="display: none;">
-                <h2>Enregistrer une Vente</h2>
-                <div class="alert alert-error" id="sale-error" style="display: none;"></div>
-                <form id="sale-form">
-                    <div class="form-group">
-                        <label for="sale-product-id">Produit à vendre</label>
-                        <select id="sale-product-id" required>
-                            </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="sale-unit-price">Prix Unitaire de Vente (€)</label>
-                        <input type="number" id="sale-unit-price" required value="0.00" step="0.01">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="sale-quantity">Quantité Vendue</label>
-                        <input type="number" id="sale-quantity" required min="1" value="1">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="sale-total-price">Prix Général (Total) (€)</label>
-                        <input type="number" id="sale-total-price" readonly value="0.00" step="0.01">
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-sale-btn">Annuler</button>
-                        <button type="submit" class="btn btn-primary">Enregistrer la Vente</button>
-                    </div>
-                </form>
-            </section>
-
-            <section id="sale-report-view" class="report-view" style="display: none;">
-                <h2>Rapport de Ventes</h2>
-                
-                <div class="report-actions">
-                    <button class="btn btn-info" id="print-report-btn">🖨️ Imprimer / Exporter PDF</button>
-                </div>
-                
-                <table id="sale-report-table">
+        <!-- Section Rapport de Vente -->
+        <section id="sales-report" class="content-section report-section">
+            <div class="report-header">
+                <h2>Rapport des Ventes</h2>
+                <button onclick="printReport('salesReportContainer')">Imprimer le Rapport</button>
+            </div>
+            <div id="salesReportContainer">
+                <table id="salesTable">
                     <thead>
                         <tr>
-                            <th>Date & Heure</th>
                             <th>Produit</th>
-                            <th>Prix Unitaire Vendu (€)</th>
-                            <th>Quantité</th>
-                            <th>Total (€)</th>
+                            <th>Quantité Vendue</th>
+                            <th>Prix Unitaire de Vente</th>
+                            <th>Total Vente</th>
+                            <th>Date</th>
                         </tr>
                     </thead>
-                    <tbody id="sale-report-tbody">
-                        </tbody>
-                    <tfoot id="sale-report-tfoot">
-                        </tfoot>
+                    <tbody>
+                        <!-- Les ventes seront insérées ici -->
+                    </tbody>
                 </table>
+            </div>
+        </section>
 
-                <p id="empty-sales-message" class="alert alert-low-stock" style="display: none;">
-                    Aucune vente enregistrée pour le moment.
-                </p>
-            </section>
-            
-            <section id="about-view" class="view" style="display: none;">
-                <h2>À Propos de StockApp Melchisédech</h2>
-                <div class="about-content">
-                    <h3>Informations du Développeur</h3>
-                    
-                    <p>Cette application de gestion de stock simple a été développée pour la gestion de la boutique d'habillement.</p>
-                    
-                    <hr>
-
-                    <p class="developer-name">Créé par : Mechack BUKASA L., Ingénieur Civil en Génie Info.</p>
-                    
-                    <p><span class="label-align">Contact</span> : meschacklukengu@gmail.com</p>
-                    <p><span class="label-align">Téléphone</span> : (+243) 972 847 505</p>
-                    <p><span class="label-align">Version</span> : 1.0.0</p>
-                </div>
-                <div class="form-actions centered-actions">
-                    <button type="button" class="btn btn-secondary" id="cancel-about-btn">Retour à l'Inventaire</button>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <p>&copy; 2025 StockApp Melchisédech. Tous droits réservés.</p>
-        </footer>
+        <!-- NOUVEAU: Section Rapport d'Achat -->
+        <section id="purchase-report" class="content-section report-section">
+            <div class="report-header">
+                <h2>Rapport des Achats (Entrées de Stock)</h2>
+                <button onclick="printReport('purchaseReportContainer')">Imprimer le Rapport</button>
+            </div>
+            <div id="purchaseReportContainer">
+                <table id="purchaseTable">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Quantité Achetée</th>
+                            <th>Prix Unitaire d'Achat</th>
+                            <th>Coût Total</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Les achats seront insérés ici -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
-    
+
+    <!-- pour Vente -->
+    <div id="sellModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('sellModal')">&times;</span>
+            <h3>Enregistrer une Vente</h3>
+            <p>Vente de: <strong id="sellProductName"></strong> (Stock actuel: <span id="sellProductStock"></span>)</p>
+            <form id="sellForm">
+                <input type="hidden" id="sellProductId">
+                <input type="hidden" id="sellOriginalPrice"> <!-- Prix d'achat pour référence -->
+                <div>
+                    <label for="sellQuantity">Quantité Vendue:</label>
+                    <input type="number" id="sellQuantity" required min="1">
+                </div>
+                <div>
+                    <label for="sellUnitPrice">Prix Unitaire de Vente:</label>
+                    <input type="number" id="sellUnitPrice" required min="0.01" step="0.01">
+                </div>
+                <button type="submit" class="sell-btn">ENREGISTRER LA VENTE</button>
+                <div id="sell-message" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- pour Achat -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('purchaseModal')">&times;</span>
+            <h3>Enregistrer un Achat (Entrée de Stock)</h3>
+            <p>Achat de: <strong id="purchaseProductName"></strong></p>
+            <form id="purchaseForm">
+                <input type="hidden" id="purchaseProductId">
+                <div>
+                    <label for="purchaseQuantity">Quantité Achetée:</label>
+                    <input type="number" id="purchaseQuantity" required min="1">
+                </div>
+                <div>
+                    <label for="purchaseUnitPrice">Prix Unitaire d'Achat (Coût):</label>
+                    <input type="number" id="purchaseUnitPrice" required min="0.01" step="0.01">
+                </div>
+                <button type="submit" class="purchase-btn">ENREGISTRER L'ACHAT</button>
+                <div id="purchase-message" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
