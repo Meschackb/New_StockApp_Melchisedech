@@ -7,7 +7,7 @@
 // --- À METTRE À JOUR APRÈS LE DÉPLOIEMENT SUR RENDER ---
 // L'URL DOIT pointer vers l'URL publique de votre service Render, suivi de /api
 // EXEMPLE: const API_BASE_URL = 'https://stockapp-melchisedech.onrender.com/api';
-const API_BASE_URL = 'http://localhost:3000/api'; // LAISSEZ CELA POUR LE DÉVELOPPEMENT LOCAL
+const API_BASE_URL = 'https://new-stockapp-melchisedech.onrender.com/api'; // URL du service Render pour le développement
 // --------------------------------------------------------
 
 // Sélecteurs DOM
