@@ -1,0 +1,441 @@
+/* styles.css */
+
+/* --- Import Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500&display=swap');
+
+/* --- Variables de Couleurs et Typographie --- */
+:root {
+    /* Couleurs primaires et accents */
+    --color-primary-dark: #2c3e50; /* Bleu marine foncé */
+    --color-primary-medium: #34495e; /* Bleu marine */
+    --color-accent: #2ecc71; /* Vert émeraude */
+    --color-secondary: #95a5a6; /* Gris doux */
+    --color-info: #3498db; /* Bleu vif */
+    --color-warning: #f39c12; /* Jaune orange */
+    --color-danger: #e74c3c; /* Rouge corail */
+
+    /* Couleurs de fond */
+    --bg-light: #ecf0f1; /* Gris très clair */
+    --bg-white: #ffffff;
+    --bg-low-stock: #fef9e7; /* Jaune très pâle */
+    --bg-alert-error: #fdeded; /* Rouge très pâle */
+    --bg-table-header: #f8f8f8; /* Gris clair pour les en-têtes de tableau */
+
+    /* Couleurs de texte */
+    --text-dark: #34495e;
+    --text-light: #ecf0f1;
+
+    /* Ombres et bordures */
+    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --border-light: 1px solid #e0e6ed;
+
+    /* Typographie */
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Roboto', sans-serif;
+    --font-size-base: 16px;
+}
+
+/* --- Réinitialisation de Base --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--bg-white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-medium);
+    transition: all 0.3s ease;
+}
+
+/* --- Typographie --- */
+h1, h2, h3 {
+    font-family: var(--font-heading);
+    color: var(--color-primary-dark);
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+h1 {
+    font-size: 2.8em;
+    font-weight: 700;
+    padding-bottom: 15px;
+    border-bottom: var(--border-light);
+    color: var(--color-accent);
+}
+
+h2 {
+    font-size: 2em;
+    font-weight: 600;
+    padding-bottom: 15px;
+    border-bottom: var(--border-light);
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+h3 {
+    font-size: 1.5em;
+    font-weight: 600;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+/* --- En-tête de l'application (Boutons de navigation) --- */
+.header-actions {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0;
+    padding: 20px;
+    background-color: var(--bg-light);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+}
+
+/* --- Boutons Génériques --- */
+.btn {
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-family: var(--font-heading);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Palette de Couleurs des Boutons */
+.btn-primary {
+    background-color: var(--color-accent);
+    color: var(--bg-white);
+}
+.btn-primary:hover {
+    background-color: #27ae60;
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: var(--bg-white);
+}
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+.btn-info {
+    background-color: var(--color-info);
+    color: var(--bg-white);
+}
+.btn-info:hover {
+    background-color: #2980b9;
+}
+
+.btn-warning {
+    background-color: var(--color-warning);
+    color: var(--bg-white);
+}
+.btn-warning:hover {
+    background-color: #e67e22;
+}
+
+.btn-danger {
+    background-color: var(--color-danger);
+    color: var(--bg-white);
+}
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-small {
+    padding: 7px 15px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 400;
+    box-shadow: none;
+}
+.btn-small:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* --- Vues (Sections principales) --- */
+.view, .form-view, .report-view {
+    padding: 30px;
+    background: var(--bg-white);
+    border-radius: 10px;
+    box-shadow: var(--shadow-light);
+    margin-bottom: 30px;
+}
+
+/* --- Tableau --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 25px;
+    background: var(--bg-white);
+    border-radius: 8px;
+    overflow: hidden; 
+    box-shadow: var(--shadow-light);
+}
+
+th, td {
+    padding: 15px;
+    border: var(--border-light);
+    text-align: center;
+}
+
+th {
+    background-color: var(--bg-table-header);
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+td:first-child {
+    text-align: left;
+    font-weight: 500;
+}
+
+/* Ligne de stock faible */
+.low-stock {
+    background-color: var(--bg-low-stock);
+    color: var(--color-warning);
+    font-weight: 600;
+}
+
+/* Pied de tableau du rapport (Total des revenus) */
+#sale-report-table tfoot th {
+    background-color: var(--color-primary-medium);
+    color: var(--text-light);
+    font-size: 1.3em;
+    font-weight: 700;
+    text-align: right;
+    padding: 18px 15px;
+}
+#sale-report-table tfoot th:last-child {
+    text-align: center;
+}
+
+
+/* --- Alertes --- */
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 600;
+    font-family: var(--font-body);
+    box-shadow: var(--shadow-light);
+}
+
+.alert-low-stock {
+    background-color: var(--bg-low-stock);
+    color: var(--color-warning);
+    border: 1px solid #fce8cc;
+}
+
+.alert-error {
+    background-color: var(--bg-alert-error);
+    color: var(--color-danger);
+    border: 1px solid #f8d7da;
+}
+
+/* --- Formulaires --- */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    font-size: 1.05em;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border: var(--border-light);
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: var(--text-dark);
+    background-color: var(--bg-white);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--color-info);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); 
+    outline: none;
+}
+
+input[readonly] {
+    background-color: #f5f7f9;
+    cursor: not-allowed;
+    border-color: #dce1e6;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 35px;
+    gap: 15px;
+}
+
+.centered-actions {
+    justify-content: center;
+}
+
+/* --- Rapport de Ventes (Spécifique) --- */
+.report-actions {
+    text-align: right;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: var(--border-light);
+}
+
+/* --- Page À Propos --- */
+.about-content {
+    max-width: 650px;
+    margin: 30px auto;
+    padding: 30px;
+    border: var(--border-light);
+    border-radius: 10px;
+    background-color: var(--bg-light);
+    text-align: center;
+    box-shadow: var(--shadow-light);
+}
+
+.about-content p {
+    margin-bottom: 10px;
+    color: var(--text-dark);
+    font-size: 1.05em;
+}
+
+.about-content hr {
+    margin: 25px 0;
+    border: none;
+    border-top: 1px dashed #dbe0e6;
+}
+
+.about-content .developer-name {
+    font-family: var(--font-heading);
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+}
+
+.about-content .label-align {
+    display: inline-block;
+    width: 90px; 
+    text-align: right; 
+    margin-right: 5px; 
+    font-weight: 600;
+}
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: var(--border-light);
+    color: var(--color-secondary);
+    font-size: 0.9em;
+}
+
+
+/* ----------------------------------------------------------------- */
+/* --- Styles spécifiques à l'impression --- */
+/* ----------------------------------------------------------------- */
+@media print {
+    body {
+        background-color: white !important;
+        padding: 0;
+        margin: 0;
+    }
+
+    .container {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0;
+        max-width: 100% !important;
+    }
+
+    header,
+    .header-actions,
+    .report-actions,
+    .form-actions,
+    footer,
+    .alert {
+        display: none !important;
+    }
+
+    h1 {
+        display: block; 
+        color: #333 !important;
+        border-bottom: 1px solid #ccc !important;
+        margin-bottom: 20px !important;
+        font-size: 2em !important;
+    }
+
+    h2 {
+        color: #555 !important;
+        border-bottom: none !important;
+        margin-top: 15px !important;
+        margin-bottom: 15px !important;
+        font-size: 1.5em !important;
+    }
+
+    table, th, td {
+        border-color: #ccc !important;
+    }
+
+    th {
+        background-color: #f0f0f0 !important;
+        color: #333 !important;
+    }
+
+    .low-stock {
+        background-color: #fff !important; 
+        color: #333 !important;
+    }
+
+    #sale-report-table tfoot th {
+        background-color: #eee !important;
+        color: #333 !important;
+    }
+
+}

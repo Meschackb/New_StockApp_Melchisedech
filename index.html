@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockApp Melchisédech - Gestion des Produits</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>StockApp Melchisédech - Gestion de Stock</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="show-about-btn">À Propos</button>
+                <button class="btn btn-info" id="show-report-btn">Rapport de Vente</button>
+                <button class="btn btn-danger" id="show-sell-btn">Enregistrer une Vente</button>
+                <button class="btn btn-primary" id="show-add-btn">+ Ajouter un Produit</button>
+            </div>
+        </header>
+        
+        <main>
+            <section id="product-list-view">
+                <h2>Inventaire Actuel</h2>
+
+                <div id="alert-container">
+                </div>
+
+                <table id="product-list-table">
+                    <thead>
+                        <tr>
+                            <th>Nom du Produit</th>
+                            <th>Quantité</th>
+                            <th>Prix d'Achat (€)</th>
+                            <th>Seuil Min</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-tbody">
+                        </tbody>
+                </table>
+
+                <p id="empty-stock-message" class="alert alert-low-stock" style="display: none;">
+                    Aucun produit en stock. Ajoutez-en un pour commencer !
+                </p>
+            </section>
+
+            <section id="product-form-view" class="form-view" style="display: none;">
+                <h2 id="form-title">Ajouter un Nouveau Produit</h2>
+                <form id="product-form">
+                    <input type="hidden" id="product-id"> 
+                    
+                    <div class="form-group">
+                        <label for="name">Nom du Produit</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantité en Stock</label>
+                        <input type="number" id="quantity" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Prix Unitaire d'Achat (€)</label>
+                        <input type="number" id="price" required min="0.01" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="minStockLevel">Niveau de Stock Minimum (Alerte)</label>
+                        <input type="number" id="minStockLevel" required min="0">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-form-btn">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer le Produit</button>
+                    </div>
+                </form>
+            </section>
+
+            <section id="sale-form-view" class="form-view" style="display: none;">
+                <h2>Enregistrer une Vente</h2>
+                <div class="alert alert-error" id="sale-error" style="display: none;"></div>
+                <form id="sale-form">
+                    <div class="form-group">
+                        <label for="sale-product-id">Produit à vendre</label>
+                        <select id="sale-product-id" required>
+                            </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sale-unit-price">Prix Unitaire de Vente (€)</label>
+                        <input type="number" id="sale-unit-price" required value="0.00" step="0.01">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sale-quantity">Quantité Vendue</label>
+                        <input type="number" id="sale-quantity" required min="1" value="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sale-total-price">Prix Général (Total) (€)</label>
+                        <input type="number" id="sale-total-price" readonly value="0.00" step="0.01">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-sale-btn">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer la Vente</button>
+                    </div>
+                </form>
+            </section>
+
+            <section id="sale-report-view" class="report-view" style="display: none;">
+                <h2>Rapport de Ventes</h2>
+                
+                <div class="report-actions">
+                    <button class="btn btn-info" id="print-report-btn">🖨️ Imprimer / Exporter PDF</button>
+                </div>
+                
+                <table id="sale-report-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Heure</th>
+                            <th>Produit</th>
+                            <th>Prix Unitaire Vendu (€)</th>
+                            <th>Quantité</th>
+                            <th>Total (€)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sale-report-tbody">
+                        </tbody>
+                    <tfoot id="sale-report-tfoot">
+                        </tfoot>
+                </table>
+
+                <p id="empty-sales-message" class="alert alert-low-stock" style="display: none;">
+                    Aucune vente enregistrée pour le moment.
+                </p>
+            </section>
+            
+            <section id="about-view" class="view" style="display: none;">
+                <h2>À Propos de StockApp Melchisédech</h2>
+                <div class="about-content">
+                    <h3>Informations du Développeur</h3>
+                    
+                    <p>Cette application de gestion de stock simple a été développée pour la gestion de la boutique d'habillement.</p>
+                    
+                    <hr>
+
+                    <p class="developer-name">Créé par : Mechack BUKASA L., Ingénieur Civil en Génie Info.</p>
+                    
+                    <p><span class="label-align">Contact</span> : meschacklukengu@gmail.com</p>
+                    <p><span class="label-align">Téléphone</span> : (+243) 972 847 505</p>
+                    <p><span class="label-align">Version</span> : 1.0.0</p>
+                </div>
+                <div class="form-actions centered-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-about-btn">Retour à l'Inventaire</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 StockApp Melchisédech. Tous droits réservés.</p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
